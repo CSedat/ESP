@@ -4,827 +4,411 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ESP IoT Dashboard</title>
-    <link rel="stylesheet" href="styles.css" />
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/utilities.css" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="img/favicon.png" />
   </head>
   <body>
-    <div class="app">
-      <header>
-        <div class="header-left">
-          <h1><i class="fas fa-microchip"></i> ESP IoT Dashboard</h1>
-          <div class="device-info" id="device-info">
-            <span id="device-name" class="device-item"
-              ><i class="fas fa-microchip"></i> <span>ESP8266</span></span
-            >
-            <span id="device-ip" class="device-item"
-              ><i class="fas fa-network-wired"></i>
-              <span>Yükleniyor...</span></span
-            >
-          </div>
+    <!-- Header -->
+    <header class="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1>ESP IoT Dashboard</h1>
         </div>
+        <nav class="main-nav">
+          <ul>
+            <li>
+              <a href="#" class="nav-link active" data-page="dashboard"
+                >Dashboard</a
+              >
+            </li>
+            <li><a href="#" class="nav-link" data-page="config">Ayarlar</a></li>
+            <li><a href="#" class="nav-link" data-page="about">Hakkında</a></li>
+            <li>
+              <div class="theme-toggle mt-1">
+                <label class="switch switch-sm">
+                  <input type="checkbox" id="theme-switch" />
+                  <span class="slider" title="Tema değiştir"></span>
+                </label>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-        <div class="header-center">
-          <div class="system-stats">
-            <div class="stat-item" title="Çalışma Süresi">
-              <i class="fas fa-clock"></i>
-              <span id="uptime">0s</span>
-            </div>
-            <div class="stat-item" title="WiFi Ağı">
-              <i class="fas fa-wifi"></i>
-              <span id="wifi-ssid">ESP_Dashboard</span>
-              <span id="wifi-strength" class="signal-strength"></span>
-            </div>
-            <div class="stat-item" title="Boş Bellek">
-              <i class="fas fa-memory"></i>
-              <span id="free-memory">0 KB</span>
-            </div>
-            <div class="stat-item" title="Chip ID">
-              <i class="fas fa-id-card"></i>
-              <span id="chip-id">-</span>
-            </div>
+    <!-- Main Content -->
+    <main>
+      <div class="container">
+        <!-- Status Bar -->
+        <section class="status-bar">
+          <div class="status-item" id="connection-status">
+            <span class="status-label">Bağlantı:</span>
+            <span class="status-value">Yükleniyor...</span>
           </div>
-        </div>
-
-        <div class="header-right">
-          <button
-            class="header-btn help-btn"
-            onclick="openHelpDialog()"
-            title="Yardım"
-          >
-            <i class="fas fa-question-circle"></i>
-          </button>
-          <button
-            class="header-btn info-btn"
-            onclick="openPinInfoDialog()"
-            title="Pin Bilgileri"
-          >
-            <i class="fas fa-info-circle"></i>
-          </button>
-          <div class="theme-toggle" title="Tema Değiştir">
-            <input type="checkbox" id="theme-switch" />
-            <label for="theme-switch" class="toggle-label">
-              <i class="fas fa-sun"></i>
-              <i class="fas fa-moon"></i>
-            </label>
+          <div class="status-item" id="ip-address">
+            <span class="status-label">IP:</span>
+            <span class="status-value">Yükleniyor...</span>
           </div>
-          <button
-            class="header-btn refresh-btn"
-            onclick="refreshDashboard()"
-            title="Yenile"
-          >
-            <i class="fas fa-sync-alt"></i>
-          </button>
-        </div>
-      </header>
+          <div class="status-item" id="uptime">
+            <span class="status-label">Çalışma Süresi:</span>
+            <span class="status-value">Yükleniyor...</span>
+          </div>
+        </section>
 
-      <main>
-        <div class="dashboard">
-          <section class="dashboard-section">
-            <h2><i class="fas fa-toggle-on"></i> Çıkış Pinleri</h2>
-            <div class="pins-grid" id="outputPins">
-              <!-- JavaScript ile buraya pin kontrolleri eklenecek -->
+        <!-- Dashboard Page -->
+        <section id="page-dashboard" class="page active">
+          <h2>Dashboard</h2>
+
+          <div class="dashboard-grid">
+            <!-- Dashboard widgets will be dynamically loaded here -->
+            <div class="widget" id="system-info">
+              <div class="widget-header">
+                <h3>Sistem Bilgileri</h3>
+              </div>
+              <div class="widget-content">
+                <table class="info-table">
+                  <tr>
+                    <td>Cihaz:</td>
+                    <td id="device-name">Yükleniyor...</td>
+                  </tr>
+                  <tr>
+                    <td>AP SSID:</td>
+                    <td id="ap-ssid">Yükleniyor...</td>
+                  </tr>
+                  <tr>
+                    <td>AP IP:</td>
+                    <td id="ap-ip">Yükleniyor...</td>
+                  </tr>
+                  <tr>
+                    <td>STA SSID:</td>
+                    <td id="sta-ssid">Yükleniyor...</td>
+                  </tr>
+                  <tr>
+                    <td>STA IP:</td>
+                    <td id="sta-ip">Yükleniyor...</td>
+                  </tr>
+                  <tr>
+                    <td>Sinyal Gücü:</td>
+                    <td id="wifi-signal">Yükleniyor...</td>
+                  </tr>
+                  <tr>
+                    <td>Boş Bellek:</td>
+                    <td id="free-heap">Yükleniyor...</td>
+                  </tr>
+                  <tr>
+                    <td>Chip ID:</td>
+                    <td id="chip-id">Yükleniyor...</td>
+                  </tr>
+                </table>
+              </div>
             </div>
-          </section>
 
-          <section class="dashboard-section">
-            <h2><i class="fas fa-chart-line"></i> Giriş Pinleri</h2>
-            <div class="pins-grid" id="inputPins">
-              <!-- JavaScript ile buraya pin değerleri eklenecek -->
-              <div class="pin-card">
-                <div class="pin-card-header">
-                  <h3>A0</h3>
-                  <span class="pin-number">Analog</span>
-                </div>
-                <div class="pin-card-body">
-                  <div class="meter">
-                    <div
-                      class="meter-bar"
-                      id="analog-meter"
-                      style="width: 0%"
-                    ></div>
-                  </div>
-                  <div class="pin-value" id="value-17">Yükleniyor...</div>
+            <div class="widget" id="control-panel">
+              <div class="widget-header">
+                <h3>Kontrol Paneli</h3>
+              </div>
+              <div class="widget-content">
+                <div id="controls-container">
+                  <!-- Kontrol bileşenleri dinamik olarak yüklenecek -->
+                  <p>Kontroller yükleniyor...</p>
                 </div>
               </div>
             </div>
-          </section>
-        </div>
-      </main>
+          </div>
+        </section>
 
-      <footer>
-        <p>ESP8266 IoT Dashboard &copy; 2023</p>
-        <p class="status-indicator">
-          <span id="status-dot" class="status-dot"></span>
-          <span id="status-text">Bağlantı kuruluyor...</span>
-        </p>
-      </footer>
-    </div>
+        <!-- Config Page -->
+        <section id="page-config" class="page">
+          <h2>Ayarlar</h2>
+          <div class="card">
+            <h3>WiFi Ayarları</h3>
+            <form id="wifi-settings">
+              <div class="form-group">
+                <label for="sta-ssid-input">WiFi SSID:</label>
+                <input
+                  type="text"
+                  id="sta-ssid-input"
+                  name="sta_ssid"
+                  placeholder="WiFi ağ adı"
+                />
+              </div>
+              <div class="form-group">
+                <label for="sta-password-input">WiFi Şifre:</label>
+                <input
+                  type="password"
+                  id="sta-password-input"
+                  name="sta_password"
+                  placeholder="WiFi şifresi"
+                />
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card mt-4">
+            <h3>Cihaz Ayarları</h3>
+            <form id="device-settings">
+              <div class="form-group">
+                <label for="device-name-input">Cihaz Adı:</label>
+                <input
+                  type="text"
+                  id="device-name-input"
+                  name="device_name"
+                  placeholder="Cihaz adı"
+                />
+              </div>
+              <div class="form-group">
+                <label for="ap-ssid-input">AP SSID:</label>
+                <input
+                  type="text"
+                  id="ap-ssid-input"
+                  name="ap_ssid"
+                  placeholder="AP ağ adı"
+                />
+              </div>
+              <div class="form-group">
+                <label for="ap-password-input">AP Şifre:</label>
+                <input
+                  type="password"
+                  id="ap-password-input"
+                  name="ap_password"
+                  placeholder="AP şifresi"
+                />
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- About Page -->
+        <section id="page-about" class="page">
+          <h2>Hakkında</h2>
+          <div class="card">
+            <h3>ESP IoT Dashboard</h3>
+            <p>
+              Bu proje, ESP8266 tabanlı IoT cihazlarının yönetimini ve
+              izlenmesini sağlayan modüler bir kontrol paneli uygulamasıdır.
+            </p>
+            <p>Özellikler:</p>
+            <ul>
+              <li>Çift çalışma modu (AP ve STA)</li>
+              <li>Responsive web arayüzü</li>
+              <li>Dinamik kontrol bileşenleri</li>
+              <li>Modüler yazılım mimarisi</li>
+              <li>Gerçek zamanlı sistem monitörü</li>
+            </ul>
+            <p>Sürüm: 1.0.0</p>
+          </div>
+        </section>
+      </div>
+    </main>
 
     <!-- Pin Bilgileri Dialog -->
-    <div class="dialog-overlay" id="pinInfoDialog">
-      <div class="dialog">
-        <div class="dialog-header">
-          <h2>ESP8266 Pin Bilgileri</h2>
-          <button class="close-btn" onclick="closePinInfoDialog()">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        <div class="dialog-body">
-          <div class="tabs">
-            <button class="tab-btn active" data-tab="overview">
-              Genel Bakış
-            </button>
-            <button class="tab-btn" data-tab="gpio">Dijital Pinler</button>
-            <button class="tab-btn" data-tab="analog">Analog Pinler</button>
-            <button class="tab-btn" data-tab="special">Özel Pinler</button>
-          </div>
-
-          <div class="tab-content active" id="overview">
-            <div class="pin-diagram">
-              <!-- <img src="esp8266_pins.svg" alt="ESP8266 Pin Şeması" class="pin-diagram-img"> -->
-              <p class="text-center">ESP8266 NodeMCU Pinout Şeması</p>
+    <div id="pinInfoDialog" class="dialog">
+        <div class="dialog-content">
+            <div class="dialog-header">
+                <h2>Pin Bilgileri</h2>
+                <span class="dialog-close" onclick="closePinInfoDialog()">&times;</span>
             </div>
-            <h3>ESP8266 Hakkında</h3>
-            <p>
-              ESP8266, düşük maliyetli, düşük güç tüketimli bir Wi-Fi
-              mikrodenetleyici çipidir. Çeşitli dijital giriş/çıkış pinleri, bir
-              analog giriş pini ve çok sayıda iletişim arabirimine sahiptir.
-            </p>
-            <div class="specs-table">
-              <div class="spec-item">
-                <div class="spec-label">İşlemci</div>
-                <div class="spec-value">Tensilica L106 32-bit, 80 MHz</div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">Flash Bellek</div>
-                <div class="spec-value">4 MB</div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">RAM</div>
-                <div class="spec-value">~50 KB kullanılabilir</div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">Dijital I/O</div>
-                <div class="spec-value">11 pin (D0-D10)</div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">Analog Giriş</div>
-                <div class="spec-value">
-                  1 pin (A0), 0-1V aralığı, 10-bit (0-1023)
-                </div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">Çalışma Voltajı</div>
-                <div class="spec-value">3.3V</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tab-content" id="gpio">
-            <div class="pin-list">
-              <div class="pin-item">
-                <div class="pin-header">
-                  <h3>D1 (GPIO5)</h3>
-                  <span class="pin-tag">Dijital</span>
-                  <span class="pin-tag">I2C SCL</span>
-                </div>
-                <div class="pin-details">
-                  <p>
-                    Dijital giriş/çıkış olarak kullanılabilir. I2C
-                    haberleşmesinde SCL (Clock) olarak da kullanılabilir.
-                  </p>
-                  <ul>
-                    <li><strong>Maksimum Akım:</strong> 12mA</li>
-                    <li>
-                      <strong>Giriş Voltajı:</strong> 0-3.3V (toleranslı değil)
-                    </li>
-                    <li>
-                      <strong>Pull-up/down:</strong> Dahili pull-up direnci
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="pin-item">
-                <div class="pin-header">
-                  <h3>D2 (GPIO4)</h3>
-                  <span class="pin-tag">Dijital</span>
-                  <span class="pin-tag">I2C SDA</span>
-                </div>
-                <div class="pin-details">
-                  <p>
-                    Dijital giriş/çıkış olarak kullanılabilir. I2C
-                    haberleşmesinde SDA (Data) olarak da kullanılabilir.
-                  </p>
-                  <ul>
-                    <li><strong>Maksimum Akım:</strong> 12mA</li>
-                    <li>
-                      <strong>Giriş Voltajı:</strong> 0-3.3V (toleranslı değil)
-                    </li>
-                    <li>
-                      <strong>Pull-up/down:</strong> Dahili pull-up direnci
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="pin-item">
-                <div class="pin-header">
-                  <h3>D3 (GPIO0)</h3>
-                  <span class="pin-tag">Dijital</span>
-                  <span class="pin-tag">Özel</span>
-                </div>
-                <div class="pin-details">
-                  <p>
-                    Dijital giriş/çıkış olarak kullanılabilir. Boot modu için
-                    kullanıldığından, bu pin bootup sırasında LOW olursa,
-                    ESP8266 flash moduna girer.
-                  </p>
-                  <ul>
-                    <li><strong>Maksimum Akım:</strong> 12mA</li>
-                    <li>
-                      <strong>Giriş Voltajı:</strong> 0-3.3V (toleranslı değil)
-                    </li>
-                    <li>
-                      <strong>Özel Fonksiyon:</strong> Flash modu tetikleyicisi
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="pin-item">
-                <div class="pin-header">
-                  <h3>D4 (GPIO2)</h3>
-                  <span class="pin-tag">Dijital</span>
-                  <span class="pin-tag">LED_BUILTIN</span>
-                </div>
-                <div class="pin-details">
-                  <p>
-                    Dijital giriş/çıkış olarak kullanılabilir. NodeMCU
-                    üzerindeki dahili LED bu pine bağlıdır (LOW aktiftir).
-                  </p>
-                  <ul>
-                    <li><strong>Maksimum Akım:</strong> 12mA</li>
-                    <li>
-                      <strong>Giriş Voltajı:</strong> 0-3.3V (toleranslı değil)
-                    </li>
-                    <li>
-                      <strong>Özel Fonksiyon:</strong> Boot sırasında HIGH
-                      olmalıdır
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="pin-item">
-                <div class="pin-header">
-                  <h3>D5 (GPIO14)</h3>
-                  <span class="pin-tag">Dijital</span>
-                  <span class="pin-tag">SPI SCK</span>
-                </div>
-                <div class="pin-details">
-                  <p>
-                    Dijital giriş/çıkış olarak kullanılabilir. SPI
-                    haberleşmesinde SCK (Clock) olarak da kullanılabilir.
-                  </p>
-                  <ul>
-                    <li><strong>Maksimum Akım:</strong> 12mA</li>
-                    <li>
-                      <strong>Giriş Voltajı:</strong> 0-3.3V (toleranslı değil)
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tab-content" id="analog">
-            <div class="pin-item wide">
-              <div class="pin-header">
-                <h3>A0 (ADC0)</h3>
-                <span class="pin-tag">Analog</span>
-              </div>
-              <div class="pin-details">
-                <p>
-                  ESP8266'daki tek analog giriş pinidir. Potansiyometre, LDR,
-                  sıcaklık sensörü gibi analog sensörleri okumak için
-                  kullanılabilir.
-                </p>
-                <ul>
-                  <li>
-                    <strong>Giriş Voltajı:</strong> 0-1V (NodeMCU'da dahili
-                    voltaj bölücü sayesinde 0-3.3V)
-                  </li>
-                  <li>
-                    <strong>Çözünürlük:</strong> 10-bit (0-1023 değer aralığı)
-                  </li>
-                  <li>
-                    <strong>Not:</strong> ESP8266 analog çıkış (DAC) özelliğine
-                    sahip değildir. Analog çıkış gerekiyorsa PWM kullanılabilir.
-                  </li>
-                </ul>
-                <div class="pin-diagram">
-                  <div class="analog-range-chart">
-                    <div class="chart-bars">
-                      <div class="chart-bar" style="height: 20%"></div>
-                      <div class="chart-bar" style="height: 40%"></div>
-                      <div class="chart-bar" style="height: 60%"></div>
-                      <div class="chart-bar" style="height: 80%"></div>
-                      <div class="chart-bar" style="height: 100%"></div>
+            <div class="dialog-body">
+                <div class="tab-container">
+                    <div class="tab-header">
+                        <button class="tab-btn active" data-tab="digitalPins">Dijital Pinler</button>
+                        <button class="tab-btn" data-tab="analogPins">Analog Pinler</button>
                     </div>
-                    <div class="chart-labels">
-                      <span>0V = 0</span>
-                      <span>3.3V = 1023</span>
+                    <div class="tab-content active" id="digitalPins">
+                        <table class="info-table">
+                            <tr>
+                                <th>Pin</th>
+                                <th>GPIO</th>
+                                <th>Kullanım</th>
+                                <th>Notlar</th>
+                            </tr>
+                            <tr>
+                                <td>D0</td>
+                                <td>GPIO16</td>
+                                <td>I/O</td>
+                                <td>Normal kullanım, derinuyku modunda wake up</td>
+                            </tr>
+                            <tr>
+                                <td>D1</td>
+                                <td>GPIO5</td>
+                                <td>I/O, SCL</td>
+                                <td>I2C için tercih edilen</td>
+                            </tr>
+                            <tr>
+                                <td>D2</td>
+                                <td>GPIO4</td>
+                                <td>I/O, SDA</td>
+                                <td>I2C için tercih edilen</td>
+                            </tr>
+                            <tr>
+                                <td>D3</td>
+                                <td>GPIO0</td>
+                                <td>I/O, FLASH</td>
+                                <td>Boot modu seçiminde kullanılır</td>
+                            </tr>
+                            <tr>
+                                <td>D4</td>
+                                <td>GPIO2</td>
+                                <td>I/O, TXD1</td>
+                                <td>Dahili LED, Boot'ta HIGH</td>
+                            </tr>
+                            <tr>
+                                <td>D5</td>
+                                <td>GPIO14</td>
+                                <td>I/O, SCLK</td>
+                                <td>SPI için</td>
+                            </tr>
+                            <tr>
+                                <td>D6</td>
+                                <td>GPIO12</td>
+                                <td>I/O, MISO</td>
+                                <td>SPI için</td>
+                            </tr>
+                            <tr>
+                                <td>D7</td>
+                                <td>GPIO13</td>
+                                <td>I/O, MOSI</td>
+                                <td>SPI için</td>
+                            </tr>
+                            <tr>
+                                <td>D8</td>
+                                <td>GPIO15</td>
+                                <td>I/O, CS</td>
+                                <td>Boot'ta LOW, SPI CS</td>
+                            </tr>
+                            <tr>
+                                <td>RX</td>
+                                <td>GPIO3</td>
+                                <td>I/O, RXD0</td>
+                                <td>UART RX</td>
+                            </tr>
+                            <tr>
+                                <td>TX</td>
+                                <td>GPIO1</td>
+                                <td>I/O, TXD0</td>
+                                <td>UART TX, Boot'ta debug çıkışı</td>
+                            </tr>
+                        </table>
                     </div>
-                  </div>
+                    <div class="tab-content" id="analogPins">
+                        <table class="info-table">
+                            <tr>
+                                <th>Pin</th>
+                                <th>İşlev</th>
+                                <th>Aralık</th>
+                                <th>Notlar</th>
+                            </tr>
+                            <tr>
+                                <td>A0</td>
+                                <td>Analog Giriş</td>
+                                <td>0-1023</td>
+                                <td>0-3.3V arası değer okur</td>
+                            </tr>
+                        </table>
+                        <div class="note mt-3">
+                            <p><strong>Not:</strong> ESP8266'da sadece bir analog giriş bulunur (A0). 0-3.3V arası gerilim değerlerini 0-1023 arası sayısal değere dönüştürür.</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-
-          <div class="tab-content" id="special">
-            <div class="pin-item">
-              <div class="pin-header">
-                <h3>RX (GPIO3)</h3>
-                <span class="pin-tag">UART</span>
-              </div>
-              <div class="pin-details">
-                <p>
-                  Seri haberleşme için alıcı (RX) pinidir. USB-Seri
-                  dönüştürücüye bağlıdır.
-                </p>
-                <ul>
-                  <li>
-                    <strong>Not:</strong> Serial.print() komutları bu pini
-                    kullanır
-                  </li>
-                  <li>
-                    <strong>Diğer Kullanımlar:</strong> Normal GPIO olarak da
-                    kullanılabilir
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="pin-item">
-              <div class="pin-header">
-                <h3>TX (GPIO1)</h3>
-                <span class="pin-tag">UART</span>
-              </div>
-              <div class="pin-details">
-                <p>
-                  Seri haberleşme için verici (TX) pinidir. USB-Seri
-                  dönüştürücüye bağlıdır.
-                </p>
-                <ul>
-                  <li>
-                    <strong>Not:</strong> Serial.print() komutları bu pini
-                    kullanır
-                  </li>
-                  <li>
-                    <strong>Diğer Kullanımlar:</strong> Normal GPIO olarak da
-                    kullanılabilir
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="pin-item">
-              <div class="pin-header">
-                <h3>Güç Pinleri</h3>
-                <span class="pin-tag">Güç</span>
-              </div>
-              <div class="pin-details">
-                <p>ESP8266 NodeMCU kartı üzerindeki güç pinleri:</p>
-                <ul>
-                  <li><strong>3V3:</strong> 3.3V güç çıkışı</li>
-                  <li><strong>GND:</strong> Toprak pini</li>
-                  <li>
-                    <strong>Vin:</strong> Harici güç girişi (5V uygulanabilir)
-                  </li>
-                </ul>
-                <p class="warning">
-                  <i class="fas fa-exclamation-triangle"></i> ESP8266 I/O
-                  pinleri 5V toleranslı değildir! Daima 3.3V seviyesinde
-                  çalışın.
-                </p>
-              </div>
-            </div>
-
-            <div class="pin-item">
-              <div class="pin-header">
-                <h3>RST</h3>
-                <span class="pin-tag">Sistem</span>
-              </div>
-              <div class="pin-details">
-                <p>Reset pini. LOW yapıldığında ESP8266 yeniden başlatılır.</p>
-              </div>
-            </div>
-
-            <div class="pin-item">
-              <div class="pin-header">
-                <h3>EN (CH_PD)</h3>
-                <span class="pin-tag">Sistem</span>
-              </div>
-              <div class="pin-details">
-                <p>
-                  Chip Enable pini. LOW yapıldığında ESP8266 devre dışı kalır.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="dialog-footer">
-          <p>
-            <i class="fas fa-lightbulb"></i> İpucu: ESP8266 ile projelerde 3.3V
-            lojik seviyelerine dikkat edin.
-          </p>
-        </div>
-      </div>
     </div>
 
-    <!-- Yardım ve Örnekler Dialog -->
-    <div class="dialog-overlay" id="helpDialog">
-      <div class="dialog">
-        <div class="dialog-header">
-          <h2>
-            <i class="fas fa-question-circle"></i> ESP8266 - Yardım ve Örnekler
-          </h2>
-          <button class="close-btn" onclick="closeHelpDialog()">
-            <i class="fas fa-times"></i>
-          </button>
+    <!-- Yardım Dialog -->
+    <div id="helpDialog" class="dialog">
+        <div class="dialog-content">
+            <div class="dialog-header">
+                <h2>Yardım</h2>
+                <span class="dialog-close" onclick="closeHelpDialog()">&times;</span>
+            </div>
+            <div class="dialog-body">
+                <div class="tab-container">
+                    <div class="tab-header">
+                        <button class="tab-btn active" data-tab="quickStart">Hızlı Başlangıç</button>
+                        <button class="tab-btn" data-tab="pinUsage">Pin Kullanımı</button>
+                        <button class="tab-btn" data-tab="wifiSettings">WiFi Ayarları</button>
+                    </div>
+                    <div class="tab-content active" id="quickStart">
+                        <h3>ESP IoT Dashboard ile Başlarken</h3>
+                        <p>ESP IoT Dashboard, ESP8266 tabanlı IoT cihazlarınızı yönetmeniz ve izlemeniz için geliştirilmiş bir web arayüzüdür.</p>
+                        
+                        <h4>Temel Özellikler</h4>
+                        <ul>
+                            <li>Pin durumlarını görüntüleme ve kontrol etme</li>
+                            <li>WiFi ayarlarını yapılandırma</li>
+                            <li>Sistem bilgilerini izleme</li>
+                        </ul>
+                        
+                        <h4>Nasıl Kullanılır?</h4>
+                        <ol>
+                            <li><strong>Dashboard:</strong> Pin durumlarını ve sistem bilgilerini görüntüler.</li>
+                            <li><strong>Ayarlar:</strong> WiFi ve cihaz ayarlarını yapılandırmanızı sağlar.</li>
+                            <li><strong>Hakkında:</strong> Proje hakkında bilgi verir.</li>
+                        </ol>
+                    </div>
+                    <div class="tab-content" id="pinUsage">
+                        <h3>Pin Kullanım Bilgileri</h3>
+                        <p>ESP8266, çeşitli I/O pinleri sunmaktadır. Ancak bazı pinlerin özel fonksiyonları bulunur:</p>
+                        
+                        <h4>Dikkat Edilmesi Gereken Pinler:</h4>
+                        <ul>
+                            <li><strong>GPIO0 (D3):</strong> Boot modunda kullanılır. Başlangıçta LOW olması programlama modunu açar.</li>
+                            <li><strong>GPIO2 (D4):</strong> Dahili LED'e bağlıdır. Boot sırasında HIGH olmalıdır.</li>
+                            <li><strong>GPIO15 (D8):</strong> Boot sırasında LOW olmalıdır.</li>
+                        </ul>
+                        
+                        <p>Pin bilgilerini görmek için <span class="link-button" onclick="closePinInfoDialog(); openPinInfoDialog()">buraya tıklayın</span>.</p>
+                    </div>
+                    <div class="tab-content" id="wifiSettings">
+                        <h3>WiFi Ayarları</h3>
+                        <p>ESP IoT Dashboard iki WiFi modu destekler:</p>
+                        
+                        <h4>AP Modu (Access Point)</h4>
+                        <p>Cihaz kendi WiFi ağını oluşturur. Varsayılan olarak:</p>
+                        <ul>
+                            <li><strong>SSID:</strong> ESP_Dashboard</li>
+                            <li><strong>Şifre:</strong> 12345678</li>
+                        </ul>
+                        
+                        <h4>STA Modu (Station)</h4>
+                        <p>Cihaz, mevcut bir WiFi ağına bağlanır. Bağlantı ayarlarını "Ayarlar" sayfasından yapılandırabilirsiniz.</p>
+                        
+                        <div class="note">
+                            <p><strong>Not:</strong> AP modu her zaman aktiftir, bu sayede cihaza her zaman erişebilirsiniz.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="dialog-body">
-          <div class="tabs">
-            <button class="tab-btn active" data-tab="getting-started">
-              Başlangıç
-            </button>
-            <button class="tab-btn" data-tab="examples">Örnek Projeler</button>
-            <button class="tab-btn" data-tab="sensors">
-              Sensör Bağlantıları
-            </button>
-            <button class="tab-btn" data-tab="troubleshooting">
-              Sorun Giderme
-            </button>
-          </div>
-
-          <div class="tab-content active" id="getting-started">
-            <h3>ESP8266 ile Başlangıç</h3>
-            <p>
-              ESP8266, düşük maliyetli bir WiFi çözümü sunan popüler bir IoT
-              geliştirme kartıdır. Bu dashboard ile ESP8266'nızın GPIO pinlerini
-              kolayca kontrol edebilir ve izleyebilirsiniz.
-            </p>
-
-            <div class="help-section">
-              <h4>Dashboard Kullanımı</h4>
-              <ul>
-                <li>
-                  <strong>Çıkış Pinleri:</strong> Bu kartlar, ESP8266'nın
-                  dijital pinlerini kontrol etmenizi sağlar. Anahtarları açıp
-                  kapatarak pinleri HIGH veya LOW durumuna getirebilirsiniz.
-                </li>
-                <li>
-                  <strong>Giriş Pinleri:</strong> Bu kartlar, ESP8266'nın analog
-                  pininden okunan değerleri gösterir. Örneğin, potansiyometre,
-                  LDR veya diğer analog sensörlerden gelen verileri
-                  görebilirsiniz.
-                </li>
-                <li>
-                  <strong>Yenileme:</strong> Dashboard 1 saniyede bir otomatik
-                  olarak yenilenir. Manuel yenilemek için sağ üstteki yenileme
-                  butonuna tıklayabilirsiniz.
-                </li>
-                <li>
-                  <strong>Tema:</strong> Aydınlık ve karanlık tema arasında
-                  geçiş yapmak için güneş/ay simgesini kullanabilirsiniz.
-                </li>
-              </ul>
-            </div>
-
-            <div class="help-section">
-              <h4>Bağlantı Bilgileri</h4>
-              <p>ESP8266 iki modda çalışabilir:</p>
-              <ul>
-                <li>
-                  <strong>Access Point (AP) Modu:</strong> ESP8266 kendi WiFi
-                  ağını oluşturur. Varsayılan SSID: <code>ESP_Dashboard</code>,
-                  Şifre: <code>12345678</code>
-                </li>
-                <li>
-                  <strong>Station (STA) Modu:</strong> ESP8266 mevcut bir WiFi
-                  ağına bağlanır. Bunun için kaynak kodunda WiFi bilgilerini
-                  yapılandırmanız gerekir.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="tab-content" id="examples">
-            <h3>Örnek Projeler</h3>
-
-            <div class="project-card">
-              <div class="project-header">
-                <h4>LED Kontrolü</h4>
-              </div>
-              <div class="project-body">
-                <p>
-                  D1, D2, D3, D4 veya D5 pinlerine LED'ler bağlayın ve dashboard
-                  üzerinden kontrol edin.
-                </p>
-                <pre><code>
-// LED'i D2 (GPIO4) pinine bağlama
-const int ledPin = D2;
-
-void setup() {
-  pinMode(ledPin, OUTPUT);
-}
-
-// Dashboard üzerinden kontrol ediliyor
-                </code></pre>
-                <div class="circuit-diagram">
-                  <p><strong>Bağlantı Şeması:</strong></p>
-                  <ul>
-                    <li>LED + (Anot) → 220Ω direnç → D2</li>
-                    <li>LED - (Katot) → GND</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="project-card">
-              <div class="project-header">
-                <h4>Potansiyometre ile Analog Okuma</h4>
-              </div>
-              <div class="project-body">
-                <p>
-                  Potansiyometre bağlayarak analog değerler okuyun ve dashboard
-                  üzerinde görüntüleyin.
-                </p>
-                <pre><code>
-// Potansiyometreyi A0 pinine bağlama
-const int potPin = A0;
-
-void setup() {
-  // A0 pini otomatik olarak analog giriş olarak ayarlanır
-}
-
-// Dashboard otomatik olarak değerleri okuyor
-                </code></pre>
-                <div class="circuit-diagram">
-                  <p><strong>Bağlantı Şeması:</strong></p>
-                  <ul>
-                    <li>Potansiyometre pin 1 → 3.3V</li>
-                    <li>Potansiyometre pin 2 → A0</li>
-                    <li>Potansiyometre pin 3 → GND</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="project-card">
-              <div class="project-header">
-                <h4>Röle Kontrolü</h4>
-              </div>
-              <div class="project-body">
-                <p>Röle modülü bağlayarak elektrikli cihazları kontrol edin.</p>
-                <pre><code>
-// Röleyi D1 pinine bağlama
-const int relayPin = D1;
-
-void setup() {
-  pinMode(relayPin, OUTPUT);
-}
-
-// Dashboard üzerinden kontrol ediliyor
-                </code></pre>
-                <div class="circuit-diagram">
-                  <p><strong>Bağlantı Şeması:</strong></p>
-                  <ul>
-                    <li>Röle IN pini → D1</li>
-                    <li>Röle VCC pini → 3.3V</li>
-                    <li>Röle GND pini → GND</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tab-content" id="sensors">
-            <h3>Sensör Bağlantıları</h3>
-
-            <div class="sensor-card">
-              <div class="sensor-header">
-                <h4>DHT11/DHT22 Sıcaklık ve Nem Sensörü</h4>
-              </div>
-              <div class="sensor-body">
-                <p>
-                  DHT sensörleri, sıcaklık ve nem ölçümü için yaygın olarak
-                  kullanılır.
-                </p>
-                <pre><code>
-#include "DHT.h"
-#define DHTPIN D4
-#define DHTTYPE DHT11 // DHT11 veya DHT22
-
-DHT dht(DHTPIN, DHTTYPE);
-
-void setup() {
-  dht.begin();
-}
-
-void loop() {
-  float h = dht.readHumidity();
-  float t = dht.readTemperature();
-  // Değerleri kullanın
-}
-                </code></pre>
-                <div class="circuit-diagram">
-                  <p>
-                    <strong>Bağlantı:</strong> VCC → 3.3V, DATA → D4, GND → GND
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="sensor-card">
-              <div class="sensor-header">
-                <h4>LDR (Işık Sensörü)</h4>
-              </div>
-              <div class="sensor-body">
-                <p>LDR ile ortam ışığı ölçümü yapabilirsiniz.</p>
-                <pre><code>
-// LDR'yi A0 pinine bağlama
-// 10K direnç ile voltaj bölücü devre kullanılıyor
-
-void setup() {
-  // A0 pini otomatik olarak analog giriş olarak ayarlanır
-}
-
-void loop() {
-  int lightValue = analogRead(A0);
-  // Değeri kullanın
-}
-                </code></pre>
-                <div class="circuit-diagram">
-                  <p>
-                    <strong>Bağlantı:</strong> LDR bir ucu → 3.3V, LDR diğer ucu
-                    → A0 ve 10K direnç → A0 ve GND
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="sensor-card">
-              <div class="sensor-header">
-                <h4>HC-SR04 Ultrasonik Mesafe Sensörü</h4>
-              </div>
-              <div class="sensor-body">
-                <p>Ultrasonik sensör ile mesafe ölçümü yapabilirsiniz.</p>
-                <pre><code>
-const int trigPin = D1;
-const int echoPin = D2;
-
-void setup() {
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-}
-
-long readDistance() {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  
-  long duration = pulseIn(echoPin, HIGH);
-  return duration * 0.034 / 2; // cm cinsinden mesafe
-}
-                </code></pre>
-                <div class="circuit-diagram">
-                  <p>
-                    <strong>Bağlantı:</strong> VCC → 3.3V, TRIG → D1, ECHO → D2,
-                    GND → GND
-                  </p>
-                  <p>
-                    <strong>Not:</strong> Bu sensör 5V ile daha iyi çalışır,
-                    ancak sinyal pinleri 3.3V ile uyumludur.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tab-content" id="troubleshooting">
-            <h3>Sorun Giderme</h3>
-
-            <div class="trouble-item">
-              <h4>
-                <i class="fas fa-exclamation-triangle"></i> WiFi Bağlantı
-                Sorunları
-              </h4>
-              <ul>
-                <li>
-                  <strong>ESP8266 AP modunda bağlanılamıyor:</strong> ESP8266'yı
-                  yeniden başlatın, güç kaynağının yeterli olduğundan emin olun.
-                </li>
-                <li>
-                  <strong>STA modunda internet bağlantısı yok:</strong> WiFi
-                  kimlik bilgilerini kontrol edin, modem/router'ın çalıştığından
-                  emin olun.
-                </li>
-                <li>
-                  <strong>Bağlantı kesiliyor:</strong> ESP8266 ve router
-                  arasındaki mesafeyi kontrol edin, güç kaynağını kontrol edin.
-                </li>
-              </ul>
-            </div>
-
-            <div class="trouble-item">
-              <h4><i class="fas fa-bolt"></i> GPIO Pin Sorunları</h4>
-              <ul>
-                <li>
-                  <strong>Pin kontrolü çalışmıyor:</strong> Bağlantıları kontrol
-                  edin, doğru pin numarasını kullandığınızdan emin olun.
-                </li>
-                <li>
-                  <strong>Analog okumalar hatalı:</strong> Voltaj bölücü devreyi
-                  kontrol edin, referans voltajının (3.3V) stabil olduğundan
-                  emin olun.
-                </li>
-                <li>
-                  <strong>Pinler hasar görebilir:</strong> GPIO pinlerine 3.3V
-                  üzerinde voltaj uygulamayın.
-                </li>
-              </ul>
-            </div>
-
-            <div class="trouble-item">
-              <h4><i class="fas fa-wrench"></i> Dashboard Sorunları</h4>
-              <ul>
-                <li>
-                  <strong>Dashboard yüklenmiyor:</strong> Doğru IP adresinden
-                  eriştiğinizden emin olun, tarayıcı önbelleğini temizleyin.
-                </li>
-                <li>
-                  <strong>Kontroller çalışmıyor:</strong> JavaScript hatası
-                  olabilir, tarayıcı konsolunu kontrol edin.
-                </li>
-                <li>
-                  <strong>Data güncellenmiyor:</strong> Bağlantı problemleri
-                  olabilir, ESP8266'yı yeniden başlatın.
-                </li>
-              </ul>
-            </div>
-
-            <div class="trouble-item">
-              <h4><i class="fas fa-book"></i> Faydalı Kaynaklar</h4>
-              <ul>
-                <li>
-                  <a
-                    href="https://arduino-esp8266.readthedocs.io/"
-                    target="_blank"
-                    >ESP8266 Arduino Core Dokümantasyonu</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="https://randomnerdtutorials.com/esp8266-pinout-reference-gpios/"
-                    target="_blank"
-                    >ESP8266 Pinout Referansı</a
-                  >
-                </li>
-                <li>
-                  <a href="https://github.com/esp8266/Arduino" target="_blank"
-                    >ESP8266 Arduino GitHub Repo</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="dialog-footer">
-          <p><i class="fas fa-code"></i> ESP8266 IoT Dashboard - Sürüm 1.0</p>
-        </div>
-      </div>
     </div>
 
-    <!-- JavaScript dosyaları - modüler yapı -->
-    <script src="js/config.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/dashboard.js"></script>
-    <script src="js/app.js"></script>
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <p>&copy; 2023 ESP IoT Dashboard</p>
+          <div class="footer-links">
+            <a href="#" onclick="openPinInfoDialog(); return false;"
+              >Pin Bilgileri</a
+            >
+            <a href="#" onclick="openHelpDialog(); return false;">Yardım</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/app.js" type="module"></script>
   </body>
 </html>
